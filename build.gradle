@@ -1,8 +1,9 @@
 plugins {
-  id 'org.springframework.boot' version '3.3.0'
-  id 'io.spring.dependency-management' version '1.1.5'
-  id 'org.jetbrains.kotlin.jvm' version '1.9.24'
-  id 'org.jetbrains.kotlin.plugin.spring' version '1.9.24'
+  id 'org.springframework.boot' version "${spring_plugin_version}"
+  id 'io.spring.dependency-management' version "${spring_dependency_version}"
+  id 'org.jetbrains.kotlin.jvm' version "${kotlin_version}"
+  id 'org.jetbrains.kotlin.plugin.spring' version "${kotlin_version}"
+  id "com.diffplug.spotless" version "${spotless_version}"
 }
 
 group = 'rcarx.io'
@@ -21,6 +22,9 @@ repositories {
 dependencies {
   implementation 'org.springframework.boot:spring-boot-starter'
   implementation 'org.jetbrains.kotlin:kotlin-reflect'
+  implementation "org.telegram:telegrambots-spring-boot-starter:$telegrambots_spring_starter_version"
+  implementation "org.telegram:telegrambots-abilities:$telegram_ability_bot_version"
+
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
   testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -34,4 +38,15 @@ kotlin {
 
 tasks.named('test') {
   useJUnitPlatform()
+}
+
+spotless {
+  kotlin {
+    ktlint().editorConfigOverride([
+            "ktlint_code_style": "ktlint_official",
+            "max_line_length": 120,
+            "ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than": 4,
+    ])
+    toggleOffOn()
+  }
 }
